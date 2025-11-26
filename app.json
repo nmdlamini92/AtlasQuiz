@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "atlasquiz",
-    "slug": "atlasquiz",
+    "name": "Atlas quiz",
+    "slug": "Atlas quiz",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "atlasquiz",
+    "icon": "./assets/images/worldmap2.png",
+    "scheme": "Atlas quiz",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
