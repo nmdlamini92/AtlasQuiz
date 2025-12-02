@@ -1,7 +1,7 @@
 import { Image, Text, View } from "react-native";
 
 
-export default function leaderBoard() {
+export default function BadgesOfHonor() {
 
     return (
         <View

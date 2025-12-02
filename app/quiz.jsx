@@ -1,13 +1,7 @@
-// App.js
-// React Native (Expo) quiz: guess the country from its map.
-// Instructions:
-// 1) Use Expo (recommended): `npx create-expo-app CountryMapQuiz` then replace App.js with this file.
-// 2) Add country map images to ./assets and update the `questions` array image requires.
-//    Example: ./assets/france.png, ./assets/japan.png, ./assets/kenya.png
-// 3) Run with `npx expo start`.
-
 import { useEffect, useRef, useState } from "react";
 import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+
+// Constants
 
 const POINTS_PER_CORRECT = 1;
 const TIME_LIMIT_SECONDS = 15;
@@ -84,17 +78,19 @@ const initialQuestions = [
   { id: "zimbabwe", name: "Zimbabwe", continent: "Africa", image: require("../assets/images/Zimbabwe.png") },
 ];
 
+
 export default function Quiz() {
+
+  // State variables
+
   const [questions, setQuestions] = useState([]);
   const [index, setIndex] = useState(0);
   const [questionNumber, setQuestionNumber] = useState(1);
-  //const [attemptedQuestions, setAttemptedQuestions] = useState(1);
   const [score, setScore] = useState(0);
   const [strikes, setStrikes] = useState(0);
   const [feedback, setFeedback] = useState(null);
   const [timeLeft, setTimeLeft] = useState(TIME_LIMIT_SECONDS);
   const [answeredThisQuestion, setAnsweredThisQuestion] = useState(false);
-  //const [answeredWrongly, setAnsweredWrongly] = useState(Boolean)
   const [options, setOptions] = useState([]);
   const timerRef = useRef(null);
   const correctAnswersCountRef = useRef(0);
@@ -115,6 +111,7 @@ export default function Quiz() {
     setQuestions(shuffleArray(initialQuestions));
   }, []);
 
+  // Generate options and start timer on question change
   useEffect(() => {
     if (questions.length > 0) {
       generateOptions();
@@ -123,6 +120,7 @@ export default function Quiz() {
     }
   }, [index, questions]);
 
+  // Check for game over condition
   useEffect(() => {
     if (strikes >= MAX_STRIKES && totalQuestions > 0) {
       const pct = Math.round((correctAnswersCountRef.current / totalQuestions) * 100);
@@ -135,6 +133,7 @@ export default function Quiz() {
     }
   }, [strikes]);
 
+  // Generate random options including the correct answer
   function getRandomOptions(correct) {
     const pool = ALL_COUNTRIES.filter(c => c.toLowerCase() !== correct.toLowerCase());
     const shuffled = shuffleArray(pool);
@@ -143,12 +142,14 @@ export default function Quiz() {
     return combined;
   }
 
+  // Generate options for the current question
   function generateOptions() {
     if (!questions[index]) return;
     const correct = questions[index].name;
     setOptions(getRandomOptions(correct));
   }
 
+  // Starts countdown timer for the question
   function startTimer() {
     stopTimer();
     setTimeLeft(TIME_LIMIT_SECONDS);
@@ -165,6 +166,7 @@ export default function Quiz() {
     }, 1000);
   }
 
+  // Stops the countdown timer
   function stopTimer() {
     if (timerRef.current) {
       clearInterval(timerRef.current);
@@ -172,6 +174,7 @@ export default function Quiz() {
     }
   }
 
+  // Handle answer selection
   function handleAnswer(selected) {
     
     if (answeredThisQuestion || strikes >= MAX_STRIKES) return;
@@ -192,18 +195,20 @@ export default function Quiz() {
     setFeedback({ type: correct ? "correct" : "wrong", selected });
   }
 
+  // Handle timeout scenario
   function handleTimeout() {
     setFeedback({ type: "timeout", text: "⏰ Time's up!" });
   }
 
+  // Proceed to the next question
   function goToNextQuestion() {
     setFeedback(null);
     setAnsweredThisQuestion(false);
     setIndex(i => (i + 1) % totalQuestions);
     setQuestionNumber(qn => qn + 1);
-    //setAttemptedQuestions(aq => aq + 1);
   }
 
+  // Render quiz over screen if game over
   if ((strikes >= MAX_STRIKES && totalQuestions > 0) || (questionNumber > 40)) {
 
     const pct = Math.round((correctAnswersCountRef.current / totalQuestions) * 100);
@@ -263,6 +268,7 @@ export default function Quiz() {
     );
   }
 
+  // Render current question
   const q = questions[index];
   if (!q) return null;
 
@@ -273,9 +279,6 @@ export default function Quiz() {
           <Text style={styles.points}>✔️ : {score}/{totalQuestions}</Text>
           <Text style={styles.strikes}>❌: {strikes}/{MAX_STRIKES}</Text>
         </View>
-        {/*<View style={{justifyContent: 'center', alignItems: 'center', marginTop: 4}}>
-          <Text style={{fontSize: 14}}>Question {questionNumber}</Text>
-        </View>*/}
         <View style={styles.mapCard}>
           <Image source={q.image} style={styles.mapImage} resizeMode="contain" />
         </View>
@@ -333,6 +336,7 @@ export default function Quiz() {
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, alignItems: "center", backgroundColor: "#f6f7fb" },
   topRow: { width: "100%", flexDirection: "row", justifyContent: "space-between" },
@@ -353,3 +357,4 @@ const styles = StyleSheet.create({
   primaryButton: { marginTop: 20, backgroundColor: "#2f6bed", paddingVertical: 12, paddingHorizontal: 18, borderRadius: 10 },
   primaryButtonText: { color: "#fff", fontWeight: "700" },
 });
+

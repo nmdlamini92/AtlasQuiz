@@ -1,7 +1,6 @@
 import { Link } from "expo-router";
 import { StyleSheet, View } from "react-native";
 
-
 export default function index() {
 
     return (
@@ -10,7 +9,6 @@ export default function index() {
             <Link href="/quiz" style={styles.startQuizLink}>▶ Start Quiz</Link>
             <Link href="/badgesOfHonor" style={styles.badgesOfHonorLink}>🥇🥈🥉 Badges of honour</Link> 
         </View>
-
     );
 }
 
